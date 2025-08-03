@@ -12,7 +12,7 @@ E - enable/ disable drawing
 
 Left Mouse Button - start/ pause/ resume drawing
 
-(when the svg meets another svg/ you cannot draw anymore/ in the console it will ask you if you are finished drawing y for yes, it will complete the svg/ n for no, you get a cooldown for two seconds or so.
+(when the svg meets another svg/ you cannot draw anymore/ in the console it will ask you if you are finished drawing y for yes, it will complete the svg/ n for no, you get a cooldown for two seconds or so)
 
 DEBUG CONTROLS-
 
