@@ -53,7 +53,6 @@ pub fn save_svg(
 
     let mut move_next = true;
     for point in points {
-        // treat NaN as break, but don't write it!
         if !point.x.is_finite() || !point.y.is_finite() {
             move_next = true;
             continue;
