@@ -32,7 +32,6 @@ fn setup_settings_config(mut commands: Commands) {
     });
 }
 
-/// Move camera with WASD keys
 fn camera_movement_system(
     keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query: Query<(&Camera, &mut Transform)>,
@@ -100,7 +99,6 @@ fn camera_zoom_system(
 
     if zoom_delta.abs() > 0.0 {
         for (_camera, mut transform) in query.iter_mut() {
-            // Clamp scale to avoid flipping or disappearing
             let current_scale = transform.scale.x;
             let new_scale = (current_scale * (1.0 - zoom_delta * zoom_speed)).clamp(0.2, 5.0);
             transform.scale = Vec3::splat(new_scale);
