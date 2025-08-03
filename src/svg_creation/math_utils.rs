@@ -45,7 +45,6 @@ pub fn paths_intersect(path1: &[Vec2], path2: &[Vec2]) -> bool {
     false
 }
 
-/// Utility for min/max of a slice of Vec2 (for bounding box computation).
 pub fn bounding_box(points: &[Vec2]) -> Option<(Vec2, Vec2)> {
     if points.is_empty() { return None; }
     let mut min_x = f32::INFINITY;
@@ -85,7 +84,6 @@ pub fn ramer_douglas_peucker(path: &[Vec2], epsilon: f32) -> Vec<Vec2> {
 
     for i in 1..path.len() - 1 {
         let point = path[i];
-        // Perpendicular distance from point to line (start, end)
         let dist = perpendicular_distance(point, start, end);
         if dist > max_dist {
             max_dist = dist;
@@ -96,7 +94,7 @@ pub fn ramer_douglas_peucker(path: &[Vec2], epsilon: f32) -> Vec<Vec2> {
     if max_dist > epsilon {
         let mut left = ramer_douglas_peucker(&path[..=max_index], epsilon);
         let right = ramer_douglas_peucker(&path[max_index..], epsilon);
-        left.pop(); // Remove duplicate at splice point
+        left.pop();
         left.extend(right);
         left
     } else {
