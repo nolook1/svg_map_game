@@ -3,7 +3,6 @@ use bevy_prototype_lyon::prelude::*;
 use super::draw_state::DrawingPoints;
 use crate::svg_creation::math_utils::smooth_lines;
 
-/// Draws lines for the current in-progress user drawing.
 pub fn draw_lines(
     mut commands: Commands,
     mut drawing_points: ResMut<DrawingPoints>,
