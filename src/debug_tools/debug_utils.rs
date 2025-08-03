@@ -2,7 +2,6 @@ use bevy::prelude::*;
 use bevy_prototype_lyon::prelude::*;
 use crate::svg_creation::spatial_grid::SpatialGrid;
 
-/// Resource to control debug overlay visibility.
 #[derive(Resource, Default)]
 pub struct GridDebugOverlayState {
     pub visible: bool,
@@ -21,7 +20,6 @@ impl Plugin for DebugPlugin {
     }
 }
 
-/// Toggles the overlay on/off with F12.
 pub fn grid_debug_toggle_system(
     keys: Res<ButtonInput<KeyCode>>,
     mut state: ResMut<GridDebugOverlayState>,
@@ -36,8 +34,6 @@ pub fn grid_debug_toggle_system(
     }
 }
 
-/// Draws a batched overlay for visible grid cells and segments.
-/// This system should be in Update.
 pub fn draw_spatial_grid_overlay(
     mut commands: Commands,
     state: Res<GridDebugOverlayState>,
@@ -45,7 +41,6 @@ pub fn draw_spatial_grid_overlay(
     query: Query<Entity, With<GridDebugDraw>>,
     camera_query: Query<(&Camera, &GlobalTransform)>,
 ) {
-    // Remove previous draw entities
     for entity in query.iter() {
         commands.entity(entity).despawn_recursive();
     }
@@ -53,15 +48,13 @@ pub fn draw_spatial_grid_overlay(
         return;
     }
 
-    // Get camera viewport bounds in world coordinates
     let (_, cam_transform) = camera_query.single();
     let cam_pos = cam_transform.translation().truncate();
-    let view_width = 1600.0; // You can calculate this from camera/viewport
+    let view_width = 1600.0; 
     let view_height = 900.0;
     let view_min = cam_pos - Vec2::new(view_width, view_height) / 2.0;
     let view_max = cam_pos + Vec2::new(view_width, view_height) / 2.0;
 
-    // Draw grid cells
     let cell_color = Srgba::new(0.0, 0.7, 0.2, 0.18);
     let cell_border = Srgba::rgb(0.0, 0.7, 0.2);
     let mut cell_path_builder = PathBuilder::new();
@@ -78,7 +71,6 @@ pub fn draw_spatial_grid_overlay(
             let rect_min = Vec2::new(x, y);
             let rect_max = rect_min + Vec2::new(cell_size, cell_size);
 
-            // Cull cells outside camera view
             if rect_max.x < view_min.x || rect_min.x > view_max.x ||
                rect_max.y < view_min.y || rect_min.y > view_max.y {
                 continue;
@@ -104,13 +96,11 @@ pub fn draw_spatial_grid_overlay(
         GridDebugDraw,
     ));
 
-    // Draw visible segment lines batched
     let seg_color = Srgba::rgb(0.8, 0.0, 0.8); // Purple
     let mut seg_path_builder = PathBuilder::new();
 
     for seg in &spatial_grid.segments {
         if seg.start == seg.end { continue; }
-        // Cull segments outside camera view (either endpoint must be in view)
         if (seg.start.x < view_min.x && seg.end.x < view_min.x) ||
            (seg.start.x > view_max.x && seg.end.x > view_max.x) ||
            (seg.start.y < view_min.y && seg.end.y < view_min.y) ||
