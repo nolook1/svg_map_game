@@ -2,20 +2,17 @@ use bevy::prelude::*;
 use std::time::Duration;
 use crate::svg_creation::spatial_grid::PathSegment;
 
-/// Tracks in-progress points and entities for drawn lines.
 #[derive(Resource, Default)]
 pub struct DrawingPoints {
     pub points: Vec<Vec2>,
     pub line_entities: Vec<Entity>,
 }
 
-/// Pending segments not yet finalized into the spatial grid.
 #[derive(Resource, Default)]
 pub struct PendingSegments {
     pub segments: Vec<PathSegment>,
 }
 
-/// Drawing state and all necessary info.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum DrawingFinalizeState {
     None,
