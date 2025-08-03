@@ -51,7 +51,6 @@ impl Plugin for SpatialGridPlugin {
 }
 
 impl SpatialGrid {
-    /// Creates a new, empty spatial grid.
     pub fn new(_cell_size: f32) -> Self {
         Self {
             bounds: Rect {
@@ -66,14 +65,12 @@ impl SpatialGrid {
         }
     }
 
-    /// Set grid bounds explicitly (min, max world coordinates) and recalc grid.
     pub fn set_bounds(&mut self, min: Vec2, max: Vec2) {
         self.bounds.min = min;
         self.bounds.max = max;
         self.recalc_grid();
     }
 
-    /// Set grid bounds automatically from SVG viewBox (min_x, min_y, width, height)
     pub fn set_bounds_from_viewbox(&mut self, viewbox: (f32, f32, f32, f32)) {
         let (_min_x, _min_y, width, height) = viewbox;
         self.bounds.min = Vec2::new(-width / 2.0, -height / 2.0);
@@ -81,7 +78,6 @@ impl SpatialGrid {
         self.recalc_grid();
     }
 
-    /// Recalculate grid cells from bounds
     pub fn recalc_grid(&mut self) {
         let width = self.bounds.max.x - self.bounds.min.x;
         let height = self.bounds.max.y - self.bounds.min.y;
@@ -106,7 +102,6 @@ impl SpatialGrid {
         Some((col, row))
     }
 
-    /// Removes a segment by its ID.
     pub fn remove_segment(&mut self, id: usize) {
         if id >= self.segments.len() {
             return;
@@ -131,7 +126,6 @@ impl SpatialGrid {
                 self.cells[idx].retain(|&seg_id| seg_id != id);
             }
         }
-        // Mark segment as empty to keep indexing consistent (optional).
         self.segments[id] = PathSegment {
             start: Vec2::ZERO,
             end: Vec2::ZERO,
@@ -139,7 +133,6 @@ impl SpatialGrid {
         };
     }
 
-    /// Rebuilds the spatial grid and reindexes all segments.
     pub fn rebuild_grid(&mut self) {
         if self.segments.is_empty() {
             println!("No segments to build grid from.");
@@ -160,7 +153,6 @@ impl SpatialGrid {
             max_y = max_y.max(seg.start.y.max(seg.end.y));
         }
 
-        // Fix: ensure min <= max
         if min_x > max_x || min_y > max_y {
             println!("SpatialGrid: bounds calculation failed (min > max), using fallback bounds.");
             self.bounds.min = Vec2::ZERO;
@@ -211,7 +203,6 @@ impl SpatialGrid {
         }
     }
 
-    /// Finds the nearest segment endpoint to `pos` within `snap_radius`.
     pub fn query_nearest_point(
         &self,
         pos: Vec2,
@@ -261,7 +252,6 @@ impl SpatialGrid {
         pos: Vec2,
         snap_radius: f32,
     ) -> Option<(PathSegment, Vec2)> {
-        // Similar to query_nearest_point, but return the whole segment and the closest point on it
         let cell_opt = self.point_to_cell(pos)?;
         let (col, row) = cell_opt;
         let mut closest_seg = None;
