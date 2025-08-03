@@ -32,7 +32,6 @@ pub fn drawing(
         return;
     }
 
-    // Block drawing if confirmation prompt is pending
     if drawing_info.confirm_pending {
         if !drawing_info.confirm_prompt_printed {
             println!("Finish drawing at border? (Y/N)");
@@ -67,7 +66,6 @@ pub fn drawing(
         return;
     }
 
-    // Border block logic
     if let Some((seg, nearest_point)) = spatial_grid.query_nearest_segment(mouse_pos, SNAP_RADIUS) {
         let near_start = nearest_point.distance(seg.start) < SNAP_RADIUS;
         let near_end = nearest_point.distance(seg.end) < SNAP_RADIUS;
