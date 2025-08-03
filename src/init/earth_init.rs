@@ -17,7 +17,6 @@ impl Plugin for WorldInitPlugin {
 }
 
 fn parse_viewbox(svg: &str) -> Option<(f32, f32, f32, f32)> {
-    // Basic regex for: viewBox="minx miny width height"
     let re = Regex::new(r#"viewBox\s*=\s*"([\d\.\-]+) ([\d\.\-]+) ([\d\.\-]+) ([\d\.\-]+)""#).ok()?;
     let caps = re.captures(svg)?;
     Some((
@@ -43,7 +42,6 @@ pub fn world_setup(
 
         let mut segments = Vec::new();
 
-        // Regex for all d="..." or d='...'
         let re_single = Regex::new(r"d\s*=\s*'([^']*)'").unwrap();
         let re_double = Regex::new(r#"d\s*=\s*"([^"]*)""#).unwrap();
 
@@ -98,7 +96,6 @@ fn parse_path_segments(
             .filter_map(|n| n.parse::<f32>().ok())
             .collect();
         if nums.len() == 2 {
-            // Center and flip coordinates
             let current = Vec2::new(
                 nums[0] - vb_width / 2.0,
                 vb_height / 2.0 - nums[1]
